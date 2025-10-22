@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Clientes – CRUD (Node + MySQL)</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Gestión de Clientes</h1>
+    <p>Frontend estático para GitHub Pages. Conecta a tu API en Render.</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Nuevo Cliente</h2>
+      <form id="create-form">
+        <div class="row">
+          <label>Nombre</label>
+          <input id="nombre" required />
+        </div>
+        <div class="row">
+          <label>Email</label>
+          <input id="email" type="email" required />
+        </div>
+        <div class="row">
+          <label>Teléfono</label>
+          <input id="telefono" />
+        </div>
+        <button type="submit">Crear</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <div class="flex">
+        <h2>Listado</h2>
+        <button id="refresh">Refrescar</button>
+      </div>
+      <table id="clientes-table">
+        <thead>
+          <tr>
+            <th>ID</th><th>Nombre</th><th>Email</th><th>Teléfono</th><th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer>
+    <small>Ingeniería Web 1 – Guía No. 2 • Node.js + Express + MySQL</small>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
