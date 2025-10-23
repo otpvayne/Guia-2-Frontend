@@ -1,33 +1,41 @@
 async function fetchJSON(url, options) {
   const res = await fetch(url, { headers: { 'Content-Type': 'application/json' }, ...options });
   if (!res.ok) {
-    const err = await res.text();
-    throw new Error(err || res.statusText);
+    const text = await res.text();
+    throw new Error(text || res.statusText);
   }
   return res.status === 204 ? null : res.json();
 }
 
+function fmt(v) {
+  if (v == null) return "";
+  return String(v);
+}
+
 function rowTemplate(c) {
-  return `<tr data-id="${c.id}">
-    <td>${c.id}</td>
-    <td><input value="${c.nombre || ""}" class="inp-nombre" /></td>
-    <td><input value="${c.email || ""}" class="inp-email" /></td>
-    <td><input value="${c.telefono || ""}" class="inp-telefono" /></td>
-    <td class="actions">
-      <button class="btn-update">Actualizar</button>
-      <button class="btn-delete">Eliminar</button>
-    </td>
+  const created = c.creado_en ? new Date(c.creado_en).toLocaleString() : "";
+  return `<tr>
+    <td>${fmt(c.id)}</td>
+    <td>${fmt(c.nombre)}</td>
+    <td>${fmt(c.email)}</td>
+    <td>${fmt(c.telefono)}</td>
+    <td>${created}</td>
   </tr>`;
 }
 
 async function loadClientes() {
   const tbody = document.querySelector("#clientes-table tbody");
+  const listMsg = document.getElementById("list-msg");
   tbody.innerHTML = "<tr><td colspan='5'>Cargando...</td></tr>";
+  listMsg.textContent = "";
   try {
-    const data = await fetchJSON(`${API_BASE}/clientes`);
-    tbody.innerHTML = data.map(rowTemplate).join("");
+    const data = await fetchJSON(`${API_BASE}/api/clientes`);
+    if (!Array.isArray(data)) throw new Error("Respuesta inesperada del servidor");
+    tbody.innerHTML = data.map(rowTemplate).join("") || "<tr><td colspan='5'>Sin registros</td></tr>";
   } catch (e) {
-    tbody.innerHTML = `<tr><td colspan='5'>Error: ${e.message}</td></tr>`;
+    tbody.innerHTML = "<tr><td colspan='5'>Error al cargar</td></tr>";
+    listMsg.textContent = e.message;
+    listMsg.className = "msg error";
   }
 }
 
@@ -38,43 +46,20 @@ document.getElementById("create-form").addEventListener("submit", async (ev) => 
   const nombre = document.getElementById("nombre").value.trim();
   const email = document.getElementById("email").value.trim();
   const telefono = document.getElementById("telefono").value.trim();
+  const msg = document.getElementById("create-msg");
+  msg.textContent = "";
   try {
-    await fetchJSON(`${API_BASE}/clientes`, {
+    await fetchJSON(`${API_BASE}/api/clientes`, {
       method: "POST",
       body: JSON.stringify({ nombre, email, telefono })
     });
     ev.target.reset();
+    msg.textContent = "Cliente creado correctamente.";
+    msg.className = "msg success";
     await loadClientes();
   } catch (e) {
-    alert("No se pudo crear: " + e.message);
-  }
-});
-
-document.querySelector("#clientes-table").addEventListener("click", async (ev) => {
-  const tr = ev.target.closest("tr[data-id]");
-  if (!tr) return;
-  const id = tr.dataset.id;
-  if (ev.target.classList.contains("btn-delete")) {
-    if (!confirm("¿Eliminar cliente #" + id + "?")) return;
-    try {
-      await fetchJSON(`${API_BASE}/clientes/` + id, { method: "DELETE" });
-      await loadClientes();
-    } catch (e) {
-      alert("No se pudo eliminar: " + e.message);
-    }
-  } else if (ev.target.classList.contains("btn-update")) {
-    const nombre = tr.querySelector(".inp-nombre").value.trim();
-    const email = tr.querySelector(".inp-email").value.trim();
-    const telefono = tr.querySelector(".inp-telefono").value.trim();
-    try {
-      await fetchJSON(`${API_BASE}/clientes/` + id, {
-        method: "PUT",
-        body: JSON.stringify({ nombre, email, telefono })
-      });
-      await loadClientes();
-    } catch (e) {
-      alert("No se pudo actualizar: " + e.message);
-    }
+    msg.textContent = e.message;
+    msg.className = "msg error";
   }
 });
 
