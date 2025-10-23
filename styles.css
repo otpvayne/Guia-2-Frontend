@@ -2,18 +2,24 @@
 body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;margin:0;background:#f8f9fb;color:#111}
 header{background:#4f46e5;color:#fff;padding:24px 16px}
 h1{margin:0;font-size:28px}
-main{max-width:980px;margin:20px auto;padding:0 16px;display:grid;gap:16px}
+main{max-width:1100px;margin:20px auto;padding:0 16px;display:grid;gap:16px}
 .card{background:#fff;border-radius:14px;box-shadow:0 10px 25px rgba(0,0,0,.06);padding:16px}
 .row{display:grid;gap:6px;margin:8px 0}
 label{font-weight:600}
 input{padding:10px 12px;border:1px solid #ddd;border-radius:10px}
-button{padding:10px 14px;border:0;border-radius:10px;cursor:pointer}
+button{padding:8px 12px;border:0;border-radius:10px;cursor:pointer}
 button[type=submit]{background:#111;color:#fff}
 #refresh{background:#eee}
 table{width:100%;border-collapse:collapse;margin-top:8px}
-th,td{border-bottom:1px solid #eee;padding:10px;text-align:left;font-size:14px}
+th,td{border-bottom:1px solid #eee;padding:10px;text-align:left;font-size:14px;vertical-align:middle}
 .flex{display:flex;align-items:center;justify-content:space-between}
 footer{padding:24px 16px;text-align:center;color:#666}
 .msg{margin-top:10px;color:#444;font-size:14px}
 .success{color:green}
 .error{color:#b00020}
+.actions{display:flex;gap:8px}
+input.inline{width:100%;padding:6px 8px;border:1px solid #ccc;border-radius:8px}
+.btn-edit{background:#111;color:#fff}
+.btn-save{background:#0ea5e9;color:#fff}
+.btn-cancel{background:#e5e7eb}
+.btn-delete{background:#ef4444;color:#fff}
