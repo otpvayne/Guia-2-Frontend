@@ -29,7 +29,7 @@ async function loadClientes() {
   tbody.innerHTML = "<tr><td colspan='5'>Cargando...</td></tr>";
   listMsg.textContent = "";
   try {
-    const data = await fetchJSON(`${API_BASE}/api/clientes`);
+    const data = await fetchJSON(`${API_BASE}`);
     if (!Array.isArray(data)) throw new Error("Respuesta inesperada del servidor");
     tbody.innerHTML = data.map(rowTemplate).join("") || "<tr><td colspan='5'>Sin registros</td></tr>";
   } catch (e) {
